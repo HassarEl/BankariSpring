@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.bankatispring.model.enums.ERole;
-
+import java.io.Serializable;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
-public class User {
+public class User implements Serializable {
 
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

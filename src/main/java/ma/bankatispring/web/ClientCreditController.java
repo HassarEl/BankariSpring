@@ -56,7 +56,7 @@ public class ClientCreditController {
         credit.setUser(user);
         credit.setStatus(Status.ENCOURS);
         creditDao.save(credit);
-        return "redirect:/client/credits?page=" + page + "&keyword=" + keyword;
+        return "redirect:/client/credits"; // ?page=" + page + "&keyword=" + keyword;
     }
 
     /** 4. Supprimer si encore ENCOURS **/

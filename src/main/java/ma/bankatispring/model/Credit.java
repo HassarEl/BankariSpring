@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ma.bankatispring.model.enums.Status;
 
+import java.io.Serializable;
+
 @Entity
 @NoArgsConstructor
 @Data
-public class Credit {
+public class Credit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
