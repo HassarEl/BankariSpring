@@ -25,13 +25,33 @@
             background-color: #f8f9fa;
             padding: 1rem;
         }
+
+         .sidebar .nav-link {
+             color: #333;
+             transition: background-color 0.3s ease, color 0.3s ease;
+             padding: 8px 12px;
+             border-radius: 4px;
+         }
+
+        .sidebar .nav-link:hover {
+            background-color: #828c9f;
+            color: white;
+            text-decoration: none;
+        }
+
+        .sidebar h5 {
+            margin-bottom: 1rem;
+            font-weight: bold;
+            color: #495057;
+        }
     </style>
 </head>
 
-<body>
+<body style="background-color: #b0c1d7">
 <!-- Navbar global -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
+        <img th:src="@{/image/logo.png}" alt="" height="60px" class="d-inline-block align-text-top">
         <a class="navbar-brand" th:href="@{/}">Bankati</a>
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -65,13 +85,12 @@
 <div class="container-fluid content">
     <div class="row">
         <!-- Sidebar, seulement si connecté -->
-        <aside class="col-md-2 sidebar" th:if="${session.user != null}">
+        <aside style="background-color: transparent; border-radius: 6px; border: 1px solid #828c9f;" class="col-md-2 sidebar" th:if="${session.user != null}">
             <h5>Menu</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/profile}">Profil</a>
                 </li>
-                <!-- Liens selon le rôle -->
                 <li class="nav-item" th:if="${session.user.role.name() == 'CLIENT'}">
                     <a class="nav-link" th:href="@{/client/credits}">Mes crédits</a>
                 </li>
