@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mon profil</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mt-3">
+        <div class="card-header"><h4>Mon profil</h4></div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Prénom</dt>
+                <dd class="col-sm-9" th:text="${session.user.firstName}"></dd>
+
+                <dt class="col-sm-3">Nom</dt>
+                <dd class="col-sm-9" th:text="${session.user.lastName}"></dd>
+
+                <dt class="col-sm-3">Username</dt>
+                <dd class="col-sm-9" th:text="${session.user.username}"></dd>
+
+                <dt class="col-sm-3">Rôle</dt>
+                <dd class="col-sm-9" th:text="${session.user.role}"></dd>
+
+                <dt class="col-sm-3">Solde (MAD)</dt>
+                <dd class="col-sm-9" th:text="${session.user.solde} + ' MAD'"></dd>
+            </dl>
+
+            <div class="mt-3">
+                <a th:href="@{/client/credits}" class="btn btn-primary">
+                    Mes demandes de crédit
+                </a>
+                <a th:href="@{/client/conversion}" class="btn btn-secondary">
+                    Convertir mon solde
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

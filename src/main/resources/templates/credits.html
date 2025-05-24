@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demandes de crédit</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Liste des demandes de crédit</h4>
+        </div>
+        <div class="card-body">
+
+            <!-- Recherche par motif -->
+            <form th:action="@{/credits}" method="get" class="mb-3 d-flex gap-2 align-items-center">
+                <label for="keyword">Motif :</label>
+                <input id="keyword"
+                       type="text" name="keyword"
+                       class="form-control w-auto"
+                       th:value="${keyword}"/>
+                <button type="submit" class="btn btn-primary">Chercher</button>
+            </form>
+
+            <!-- Tableau des crédits -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th><th>Montant</th><th>Mois</th>
+                    <th>Motif</th><th>Status</th><th>Utilisateur</th><th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${listCredits}">
+                    <td th:text="${c.id}"></td>
+                    <td th:text="${c.mtCredit} + ' MAD'"></td>
+                    <td th:text="${c.nbrMois}"></td>
+                    <td th:text="${c.motif}"></td>
+
+                    <!-- Colonne Status simplifiée -->
+                    <td>
+              <span th:if="${c.status.name() == 'ENCOURS'}"
+                    class="badge bg-warning text-dark">En cours</span>
+                        <span th:if="${c.status.name() == 'REFUSE'}"
+                              class="badge bg-danger">Refusé</span>
+                        <span th:if="${c.status.name() == 'ACCEPT'}"
+                              class="badge bg-success">Accepté</span>
+                    </td>
+
+                    <td th:text="${c.user.firstName + ' ' + c.user.lastName}"></td>
+
+                    <!-- Colonne Actions -->
+                    <td>
+                        <a th:if="${c.status.name() == 'ENCOURS'}"
+                           th:href="@{/credits/approve(id=${c.id},page=${currentPage},keyword=${keyword})}"
+                           class="btn btn-sm btn-success">Approuver</a>
+                        <a th:if="${c.status.name() == 'ENCOURS'}"
+                           th:href="@{/credits/refuse(id=${c.id},page=${currentPage},keyword=${keyword})}"
+                           class="btn btn-sm btn-danger">Refuser</a>
+                        <span th:if="${c.status.name() != 'ENCOURS'}" class="text-muted">✔</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination">
+                    <li th:each="pg, st : ${pages}"
+                        class="page-item"
+                        th:classappend="${st.index == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${st.index + 1}"
+                           th:href="@{/credits(page=${st.index},keyword=${keyword})}"></a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

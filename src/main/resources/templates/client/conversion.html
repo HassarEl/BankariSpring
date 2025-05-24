@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Conversion de solde</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mt-3">
+        <div class="card-header"><h4>Conversion de solde</h4></div>
+        <div class="card-body">
+            <form th:action="@{/client/conversion}" method="post" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Montant actuel (MAD)</label>
+                    <input type="number"
+                           class="form-control"
+                           th:value="${session.user.solde}"
+                           readonly/>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Devise cible</label>
+                    <select name="target"
+                            class="form-select"
+                            th:value="${target}">
+                        <option value="MAD">MAD</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                </div>
+                <input type="hidden" name="page"    th:value="${currentPage}"/>
+                <input type="hidden" name="keyword" th:value="${keyword}"/>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Convertir</button>
+                    <a th:href="@{/client/credits(page=${currentPage},keyword=${keyword})}"
+                       class="btn btn-secondary">Retour</a>
+                </div>
+            </form>
+
+            <div th:if="${result != null}" class="mt-4">
+                <p>
+                    Résultat : <strong th:text="${result}"></strong>
+                    <span th:text="${target}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mes demandes de crédit</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Mes demandes de crédit</h4>
+            <a th:href="@{/client/credits/add}" class="btn btn-success btn-sm">
+                <i class="bi bi-plus-lg"></i> Nouvelle demande
+            </a>
+        </div>
+        <div class="card-body">
+
+            <!-- Recherche par motif -->
+            <form th:action="@{/client/credits}" method="get"
+                  class="mb-3 d-flex gap-2 align-items-center">
+                <label for="keyword">Motif :</label>
+                <input id="keyword"
+                       type="text"
+                       name="keyword"
+                       class="form-control w-auto"
+                       th:value="${keyword}"/>
+                <button type="submit" class="btn btn-primary">Chercher</button>
+            </form>
+
+            <!-- Tableau -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Montant</th>
+                    <th>Durée</th>
+                    <th>Motif</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${listCredits}">
+                    <td th:text="${c.id}"></td>
+                    <td th:text="${c.mtCredit} + ' MAD'"></td>
+                    <td th:text="${c.nbrMois} + ' mois'"></td>
+                    <td th:text="${c.motif}"></td>
+
+                    <!-- Status -->
+                    <td>
+                        <span th:if="${c.status.name() == 'ENCOURS'}"
+                              class="badge bg-warning text-dark">En cours</span>
+                        <span th:if="${c.status.name() == 'REFUSE'}"
+                              class="badge bg-danger">Refusé</span>
+                        <span th:if="${c.status.name() == 'ACCEPT'}"
+                              class="badge bg-success">Accepté</span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td>
+                        <a th:if="${c.status.name() == 'ENCOURS'}"
+                           th:href="@{/client/credits/delete(id=${c.id},page=${currentPage},keyword=${keyword})}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Supprimer cette demande ?')">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <span th:if="${c.status.name() != 'ENCOURS'}" class="text-muted">—</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination">
+                    <li th:each="pg,st : ${pages}"
+                        class="page-item"
+                        th:classappend="${st.index == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${st.index + 1}"
+                           th:href="@{/client/credits(page=${st.index},keyword=${keyword})}"></a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

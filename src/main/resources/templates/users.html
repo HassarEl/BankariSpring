@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Liste des utilisateurs</title>
+</head>
+<body>
+<!-- Contenu spécifique à la page -->
+<section layout:fragment="content">
+    <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4>Liste des utilisateurs</h4>
+            <!-- BOUTON AJOUTER -->
+            <a th:href="@{/users/add}"
+               class="btn btn-success btn-sm">
+                <i class="bi bi-plus-lg"></i> Ajouter
+            </a>
+        </div>
+
+        </div>
+        <div class="card-body">
+            <!-- Form Recherche -->
+            <form method="get" th:action="@{users}" class="mb-3 d-flex gap-2 align-items-center">
+                <label>Mot clé :</label>
+                <input type="text" name="keyword" class="form-control w-auto" th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Chercher</button>
+            </form>
+
+            <!-- Table Users -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Solde</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p:${listUsers}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.firstName}"></td>
+                    <td th:text="${p.lastName}"></td>
+                    <td th:text="${p.username}"></td>
+                    <td th:text="${p.role}"></td>
+                    <td th:text="${p.solde}"></td>
+                    <!-- … dans le <tbody> de users.html … -->
+                    <td>
+                        <a th:href="@{/users/view(id=${p.id})}"
+                           class="btn btn-sm btn-info" title="Voir"><i class="bi bi-eye-fill"></i></a>
+
+                        <a th:href="@{/users/edit(id=${p.id}, keyword=${keyword}, page=${currentPage})}"
+                           class="btn btn-sm btn-warning" title="Éditer"><i class="bi bi-pencil-fill"></i></a>
+
+                        <a th:href="@{/delete(id=${p.id}, keyword=${keyword}, page=${currentPage})}"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Êtes-vous sûr ?')"
+                           title="Supprimer"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination">
+                    <li th:each="page, status : ${pages}" class="page-item"
+                        th:classappend="${status.index == currentPage} ? 'active'">
+                        <a class="page-link" th:text="${status.index + 1}"
+                           th:href="@{index(page=${status.index}, keyword=${keyword})}"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+</body>
+</html>
