@@ -17,38 +17,40 @@ public class ClientConversionController {
 
     private final ConversionService conversionService;
 
-    /** Afficher le formulaire **/
+    /**
+     * Afficher le formulaire
+     **/
     @GetMapping
     public String form(Model model,
                        HttpSession session,
-                       @RequestParam(name="page",    defaultValue="0")  int page,
-                       @RequestParam(name="keyword", defaultValue="")   String keyword)
-    {
+                       @RequestParam(name = "page", defaultValue = "0") int page,
+                       @RequestParam(name = "keyword", defaultValue = "") String keyword) {
         User user = (User) session.getAttribute("user");
-        model.addAttribute("solde",       user.getSolde());
-        model.addAttribute("result",      null);
-        model.addAttribute("target",      "");
+        model.addAttribute("solde", user.getSolde());
+        model.addAttribute("result", null);
+        model.addAttribute("target", "");
         model.addAttribute("currentPage", page);
-        model.addAttribute("keyword",     keyword);
+        model.addAttribute("keyword", keyword);
         return "client/conversion";
     }
 
-    /** Traiter la conversion **/
+    /**
+     * Traiter la conversion
+     **/
     @PostMapping
     public String convert(@RequestParam String target,
-                          @RequestParam(name="page",    defaultValue="0")  int page,
-                          @RequestParam(name="keyword", defaultValue="")   String keyword,
+                          @RequestParam(name = "page", defaultValue = "0") int page,
+                          @RequestParam(name = "keyword", defaultValue = "") String keyword,
                           HttpSession session,
-                          Model model)
-    {
+                          Model model) {
         User user = (User) session.getAttribute("user");
         BigDecimal res = conversionService.convert(user.getSolde(), target);
 
-        model.addAttribute("solde",       user.getSolde());
-        model.addAttribute("result",      res);
-        model.addAttribute("target",      target);
+        model.addAttribute("solde", user.getSolde());
+        model.addAttribute("result", res);
+        model.addAttribute("target", target);
         model.addAttribute("currentPage", page);
-        model.addAttribute("keyword",     keyword);
+        model.addAttribute("keyword", keyword);
         return "client/conversion";
     }
 }
